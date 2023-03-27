@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
     <title>Laravel</title>
 
     <!-- Fonts -->
@@ -12,6 +12,9 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <!-- Styles -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.6.1/sweetalert2.js" integrity="sha512-LpwiJ8mNG6duSLN9xY2+iwd0R+0VhZeBRaMqAkkT+xaqG8HLPKUBd32sDOjfFhZk6HgBzaF+w7DPCg8yIfsxpA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://use.fontawesome.com/d5c0599dc5.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.6.1/sweetalert2.css" integrity="sha512-0BcnfLcXBm81KVM/wzoS7yZRVflcQC3rj/Wqgi4cHSGktXTMcXrP6kquf1I14JFUj2LiFCfpZCSf/+478ifefA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         /*! normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css */
         html {
@@ -393,9 +396,25 @@
 
 <body>
     <div class="content">
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+            Add New User
+        </button>
         <div class="row">
             <div class="col-sm-8">
+
                 <table class="table">
+
+                    @if(Session::has('success'))
+                    <div class="alert alert-success">
+                        {{Session::get('success')}}
+                    </div>
+                    @endif
+                    @if(Session::has('error'))
+                    <div class="alert alert-danger">
+                        {{Session::get('error')}}
+                    </div>
+                    @endif
                     <thead>
                         <tr>
                             <th scope="col">#Id</th>
@@ -408,9 +427,9 @@
                         @foreach ($users as $user)
                         <tr>
                             <th scope="row">{{$user->id}}</th>
-                            <td>{{$user->name}}</td>
+                            <td>{{$user->name}} {{$user->surname}}</td>
                             <td>{{$user->email}}</td>
-                            <td><i class="fa fa-trash-o"></i></td>
+                            <td><a href="users/delete/{{$user->id}}"><i class="fa fa-trash-o"></i></a></td>
                         </tr>
                         @endforeach
                     </tbody>
@@ -418,9 +437,94 @@
                 </form>
             </div>
         </div>
+
+
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Add New User</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form id="form" method="POST">
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="name">Name</label>
+                                <input type="text" class="form-control" id="name" name="name" placeholder="Enter name" require>
+                            </div>
+                            <div class="form-group">
+                                <label for="name">Surname</label>
+                                <input type="text" class="form-control" id="surname" name="surname" placeholder="Enter surname" require>
+                            </div>
+                            <div class="form-group">
+                                <label for="name">Email</label>
+                                <input type="email" class="form-control" id="email" name="email" placeholder="Enter email" require>
+                            </div>
+                            <div class="form-group">
+                                <label for="name">Position</label>
+                                <input type="text" class="form-control" id="position" name="position" placeholder="Enter position" require>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <i class="fa fa-spinner" id="loading" style="display:none"></i>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-primary">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 </body>
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
+<script>
+    $("#form").submit(function(event) {
+        document.getElementById("loading").style.display = 'block';
+        event.preventDefault();
+        let user_data = {
+            name: $("#name").val(),
+            surname: $("#surname").val(),
+            email: $("#email").val(),
+            password: Math.random().toString(36).slice(2),
+            position: $("#position").val(),
+        };
+
+        $.ajax({
+            type: "POST",
+            url: "/users/create",
+            data: user_data,
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function(response) {
+                console.log(response);
+                Swal.fire({
+                    title: 'User Created',
+                    text: "User created successful",
+                    icon: 'success'
+                }).then((result) => {
+                    window.location.href = "/";
+                })
+
+                document.getElementById("loading").style.display = 'none';
+
+            },
+            error: function(err) {
+                console.log(err);
+                Swal.fire({
+                    title: 'User creation failed',
+                    text: err.responseJSON.message,
+                    icon: 'error'
+                });
+                document.getElementById("loading").style.display = 'none';
+            }
+        });
+
+    });
+</script>
 
 </html>

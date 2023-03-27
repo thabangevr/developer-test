@@ -19,6 +19,6 @@ class UserRepository implements UserInterface
 
     public function deleteUser($userId)
     {
-        $user = User::find($userId);
+        return User::destroy($userId);
     }
 }

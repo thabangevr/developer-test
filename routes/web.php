@@ -15,3 +15,5 @@ use App\Http\Controllers\UserController;
 */
 
 Route::get('/', [UserController::class, 'allUsers']);
+Route::get('users/delete/{id}', [UserController::class, 'delete']);
+Route::post('users/create', [UserController::class, 'store']);
