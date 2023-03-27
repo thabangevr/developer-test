@@ -4,9 +4,7 @@ namespace App\Http\Controllers;;
 
 use Illuminate\Http\Request;
 use App\Repositories\Interfaces\UserInterface;
-use App\Repositories\UserRepository;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
@@ -54,9 +52,15 @@ class UserController extends Controller
         $deleteUser = $this->userRepository->deleteUser($userId);
 
         if ($deleteUser) {
-            return Redirect::to('/')->with('success', 'User Deleted');
+            $response = [
+                'data' => $deleteUser,
+            ];
+            return response($response, 200);
         } else {
-            return Redirect::to('/')->with('error', 'User could not be deleted, please try again');
+            $response = [
+                'data' => $deleteUser->error->massage,
+            ];
+            return response($response, 409);
         }
     }
 }

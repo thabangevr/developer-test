@@ -395,89 +395,90 @@
 </head>
 
 <body>
-    <div class="content">
-        <!-- Button trigger modal -->
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-            Add New User
-        </button>
-        <div class="row">
-            <div class="col-sm-8">
+    <div id="pag-container" style="width:80%; display:block; margin: 0 auto !important">
+        <div class="content">
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createUserModal" style="float:right">
+                Add New User
+            </button>
+            <div class="row">
+                <div class="col-sm-12">
+                    <table class="table">
 
-                <table class="table">
-
-                    @if(Session::has('success'))
-                    <div class="alert alert-success">
-                        {{Session::get('success')}}
-                    </div>
-                    @endif
-                    @if(Session::has('error'))
-                    <div class="alert alert-danger">
-                        {{Session::get('error')}}
-                    </div>
-                    @endif
-                    <thead>
-                        <tr>
-                            <th scope="col">#Id</th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Email</th>
-                            <th scope="col">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($users as $user)
-                        <tr>
-                            <th scope="row">{{$user->id}}</th>
-                            <td>{{$user->name}} {{$user->surname}}</td>
-                            <td>{{$user->email}}</td>
-                            <td><a href="users/delete/{{$user->id}}"><i class="fa fa-trash-o"></i></a></td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-                </form>
-            </div>
-        </div>
-
-
-        <!-- Modal -->
-        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Add New User</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <form id="form" method="POST">
-                        <div class="modal-body">
-                            <div class="form-group">
-                                <label for="name">Name</label>
-                                <input type="text" class="form-control" id="name" name="name" placeholder="Enter name" require>
-                            </div>
-                            <div class="form-group">
-                                <label for="name">Surname</label>
-                                <input type="text" class="form-control" id="surname" name="surname" placeholder="Enter surname" require>
-                            </div>
-                            <div class="form-group">
-                                <label for="name">Email</label>
-                                <input type="email" class="form-control" id="email" name="email" placeholder="Enter email" require>
-                            </div>
-                            <div class="form-group">
-                                <label for="name">Position</label>
-                                <input type="text" class="form-control" id="position" name="position" placeholder="Enter position" require>
-                            </div>
+                        @if(Session::has('success'))
+                        <div class="alert alert-success">
+                            {{Session::get('success')}}
                         </div>
-                        <div class="modal-footer">
-                            <i class="fa fa-spinner" id="loading" style="display:none"></i>
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                            <button type="submit" class="btn btn-primary">Save</button>
+                        @endif
+                        @if(Session::has('error'))
+                        <div class="alert alert-danger">
+                            {{Session::get('error')}}
                         </div>
+                        @endif
+                        <thead>
+                            <tr>
+                                <th scope="col">#Id</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Email</th>
+                                <th scope="col">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($users as $user)
+                            <tr>
+                                <th scope="row">{{$user->id}}</th>
+                                <td>{{$user->name}} {{$user->surname}}</td>
+                                <td>{{$user->email}}</td>
+                                <td><a href="users/delete/{{$user->id}}" id="{{$user->id}}"><i class="fa fa-trash-o"></i></a></td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                     </form>
                 </div>
             </div>
+
+
+            <!-- Modal -->
+            <div class="modal fade" id="createUserModal" tabindex="-1" role="dialog" aria-labelledby="createUserModal" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Add New User</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <form id="form" method="POST">
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label for="name">Name</label>
+                                    <input type="text" class="form-control" id="name" name="name" placeholder="Enter name" require>
+                                </div>
+                                <div class="form-group">
+                                    <label for="name">Surname</label>
+                                    <input type="text" class="form-control" id="surname" name="surname" placeholder="Enter surname" require>
+                                </div>
+                                <div class="form-group">
+                                    <label for="name">Email</label>
+                                    <input type="email" class="form-control" id="email" name="email" placeholder="Enter email" require>
+                                </div>
+                                <div class="form-group">
+                                    <label for="name">Position</label>
+                                    <input type="text" class="form-control" id="position" name="position" placeholder="Enter position" require>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <i class="fa fa-spinner" id="loading" style="display:none"></i>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                <button type="submit" class="btn btn-primary">Save</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
+</body>
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
@@ -524,6 +525,56 @@
             }
         });
 
+    });
+
+
+    $("a").click(function(event) {
+        event.preventDefault();
+        let Id = $(this).attr("id");
+        if(Id == ""){
+            return;
+        }
+        Swal.fire({
+            title: 'Delete User',
+            text: "Are you sure you want to delete this user?",
+            showCancelButton: true,
+            confirmButtonText: 'Delete',
+            icon: 'question'
+        }).then((result) => {
+            if (result.isConfirmed === true) {
+                $.ajax({
+                    type: "GET",
+                    url: "/users/delete/"+Id,
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(response) {
+                        console.log(response);
+                        Swal.fire({
+                            title: 'User Deleted',
+                            text: "User deleted successful",
+                            icon: 'success'
+                        }).then((result) => {
+                            window.location.href = "/";
+                        })
+
+                        document.getElementById("loading").style.display = 'none';
+
+                    },
+                    error: function(err) {
+                        console.log(err);
+                        Swal.fire({
+                            title: 'User creation failed',
+                            text: err.responseJSON.message,
+                            icon: 'error'
+                        });
+                        document.getElementById("loading").style.display = 'none';
+                    }
+                });
+            } else {
+                document.getElementById("loading").style.display = 'none';
+            }
+        })
     });
 </script>
 
