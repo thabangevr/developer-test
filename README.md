@@ -1,1 +1,3 @@
-Run  php artisan db:seed to populate DB with data
+-run php artisan:migrate
+-Run  php artisan db:seed to populate DB with data
+-Run ./vendor/bin/phpunit for testing
