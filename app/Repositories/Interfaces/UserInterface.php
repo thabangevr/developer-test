@@ -6,5 +6,5 @@ interface UserInterface
 {
     public function allUsers();
     public function storeUser($userData);
-    public function deleteUser();
+    public function deleteUser($userId);
 }

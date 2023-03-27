@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repositories\UserRepository;
+namespace App\Repositories;
 
 use App\Repositories\Interfaces\UserInterface;
 use App\Models\User;
@@ -9,12 +9,12 @@ class UserRepository implements UserInterface
 {
     public function allUsers()
     {
-        return User::latest()->paginate(15);
+        return User::all();
     }
 
     public function storeUser($userData)
     {
-        return User::create();
+        return User::create($userData);
     }
 
     public function deleteUser($userId)
